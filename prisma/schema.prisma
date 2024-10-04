@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+model Auth {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  password     String
+  accesToken   String?
+  refreshToken String?
+  userId       String   @unique @db.Uuid // Cambiado a String y agregado @db.Uuid
+  user         User     @relation(fields: [userId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model User {
+  id                  String       @id @default(uuid()) @db.Uuid
+  name                String
+  icon                String?
+  iconStyle           String?
+  isPremium           Boolean      @default(false)
+  auth                Auth?        @relation
+  friendshipsSent     Friendship[] @relation("UserFriendsSent")
+  friendshipsReceived Friendship[] @relation("UserFriendsReceived")
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
+
+model Friendship {
+  id        String   @id @default(uuid()) @db.Uuid
+  user1Id   String   @db.Uuid
+  user2Id   String   @db.Uuid
+  user1     User     @relation("UserFriendsSent", fields: [user1Id], references: [id])
+  user2     User     @relation("UserFriendsReceived", fields: [user2Id], references: [id])
+  status    String   @default("pending") // "pending", "accepted", "rejected"
+  createdAt DateTime @default(now())
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
