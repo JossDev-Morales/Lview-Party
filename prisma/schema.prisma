@@ -21,6 +21,8 @@ model User {
   icon                String?
   iconStyle           String?
   isPremium           Boolean      @default(false)
+  subscriptionType    String?
+  inSession           Boolean      @default(false)
   auth                Auth?        @relation
   friendshipsSent     Friendship[] @relation("UserFriendsSent")
   friendshipsReceived Friendship[] @relation("UserFriendsReceived")
