@@ -11,10 +11,28 @@
   },
   "keywords": [],
   "author": {
-    "name": "Jossdev (josue morales)",
-    "email": "thejosuescript@gmail.com"
+    "name": "Josue Eleazar Tejeda Morales",
+    "email": "thejosuescript@gmail.com",
+    "url": "https://jossdev.netlify.app/"
   },
-  "license": "ISC",
+  "maintainers": [
+    {
+      "name": "Jossdev (josue morales)",
+      "email": "thejosuescript@gmail.com",
+      "url": "https://jossdev.netlify.app/"
+    }
+  ],
+  "repository": {
+    "type": "GIT",
+    "url": "https://github.com/JossDev-Morales/Lview-Party",
+    "directory": "server/"
+  },
+  "bugs": {
+    "email": "thejosuescript@gmail.com",
+    "url": "https://github.com/JossDev-Morales/Lview-Party/issues"
+  },
+  "homepage": "https://github.com/JossDev-Morales/Lview-Party/blob/main/README.MD",
+  "license": "SEE LICENSE IN LICENSE",
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/uuid": "^10.0.0",
