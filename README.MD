@@ -9,7 +9,7 @@ Mira Netflix & YouTube en una experiencia de sincronización completa.
 
 **Lview Party** es una extensión de Google Chrome que te permite sincronizar la visualización de contenido en **Netflix** y **YouTube** con amigos o participantes, en una experiencia de sincronización completa y en tiempo real.
 
-## Descripción (English)
+## Description (English)
 Watch Netflix & YouTube in a full view sync experience.
 
 **Lview Party** is a Google Chrome extension that allows you to synchronize content viewing on **Netflix** and **YouTube** with friends or participants, providing a complete and real-time synchronization experience.
@@ -22,8 +22,8 @@ Watch Netflix & YouTube in a full view sync experience.
 ## Main Features
 - Real-time synchronization of videos on Netflix and YouTube.
 - Manage multiple participants in a virtual room.
--Intuitive interface to control content playback.
--**Premium features**: Enhancements in synchronization quality, greater control over the room, and exclusive features for premium members.
+- Intuitive interface to control content playback.
+- **Premium features**: Enhancements in synchronization quality, greater control over the room, and exclusive features for premium members.
 
 ## Cómo empezar
 1. Instala **Lview Party** desde la [Chrome Web Store](https://github.com/JossDev-Morales/Lview-Party/blob/main/LICENSE).
@@ -52,5 +52,5 @@ Actualmente en desarrollo
 
 ## Version
 **Pre-Alpha v0.1**
-**Under a custom license** se license [**here**](https://github.com/JossDev-Morales/Lview-Party/blob/main/LICENSE)
+**Under a custom license** see license [**here**](https://github.com/JossDev-Morales/Lview-Party/blob/main/LICENSE)
 
