@@ -12,8 +12,9 @@ function verifyAccesToken(publicToken,accesToken) {
 }
 function validateAccesType(token) {
     try {
-        const {type}=decode(token)
-        return type==='acces'
+        const data=decode(token)
+        console.log(data)
+        return data.type==='access'
     } catch (error) {
         throw error
     }

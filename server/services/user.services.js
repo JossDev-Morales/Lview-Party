@@ -6,7 +6,7 @@ import { Icons } from "../tools/IconGenerator.js";
 export class UserServices {
     static async getUserByMail(email) {
         const auth = await authService.getAuthByMail(email);
-        if(!auth){
+        if (!auth) {
             return auth
         }
         const user = await prisma.user.findFirst({ where: { id: auth.userId } });
@@ -21,15 +21,15 @@ export class UserServices {
     static async createUser({ email, password, name, accesToken, refreshToken }) {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-        const icon=Icons.genRandomIcon()
+        const icon = Icons.genRandomIcon()
         // Create user and authentication data in a transaction
         return await prisma.$transaction(async (tx) => {
             const user = await tx.user.create({
                 data: {
                     name,
-                    isPremium:false,
-                    icon:icon.seed,
-                    iconStyle:icon.style
+                    isPremium: false,
+                    icon: icon.seed,
+                    iconStyle: icon.style
                 },
             });
 
@@ -45,5 +45,26 @@ export class UserServices {
 
             return user;
         });
+    }
+    static async updateIcon(ID, { seed, style }) {
+        try {
+            const update = await prisma.user.update({ where: { id: ID }, data: { icon: seed, iconStyle: style } })
+        } catch (error) {
+            throw error
+        }
+    }
+    static async updateName(ID, { name }) {
+        try {
+            const update = await prisma.user.update({ where: { id: ID }, data: { name } })
+        } catch (error) {
+            throw error
+        }
+    }
+    static async updateSessionStatus(ID,{status}){
+        try {
+            const update =await prisma.user.update({where:{id:ID},data:{inSession:status}}) 
+        } catch (error) {
+            throw error
+        }
     }
 }
