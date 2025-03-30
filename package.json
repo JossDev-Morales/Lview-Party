@@ -34,6 +34,7 @@
   "homepage": "https://github.com/JossDev-Morales/Lview-Party/blob/main/README.MD",
   "license": "SEE LICENSE IN LICENSE",
   "devDependencies": {
+    "@prisma/client": "^6.5.0",
     "@types/express": "^5.0.1",
     "@types/uuid": "^10.0.0",
     "nodemon": "^3.1.4",
@@ -42,7 +43,6 @@
   "dependencies": {
     "@dicebear/collection": "^9.2.1",
     "@dicebear/core": "^9.2.1",
-    "@prisma/client": "^5.19.0",
     "bcrypt": "^5.1.1",
     "celebrate": "^15.0.3",
     "cheerio": "^1.0.0",
