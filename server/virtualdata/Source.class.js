@@ -9,7 +9,7 @@ class Source {
             platform == 'netflix' ? Object.fromEntries([this.url.pathname.split("/").slice(1, 3)]) : "invalidPlatform"
         /** */
         this.querys = Object.fromEntries(this.url.searchParams)
-        this.time = 0
+        this.time = time
         this.status = 0
     }
     upSourceTime(t) {
@@ -24,30 +24,30 @@ class Source {
      * @returns {string}
      */
     formatTime(t) {
-        const seconds= t??this.time
+        const seconds = t ?? this.time;
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-
-        // Formatear las unidades para que siempre tengan dos dígitos
-        const formattedHours = hours.toString().padStart(2, '0');
-        const formattedMinutes = minutes.toString().padStart(2, '0');
+        const secs = Math.floor(seconds % 60); // Redondear los segundos
+    
+        // Formatear los segundos siempre con dos dígitos
         const formattedSeconds = secs.toString().padStart(2, '0');
-
+        // Formatear los minutos sin ceros a la izquierda, excepto si hay horas
+        const formattedMinutes = hours > 0 ? minutes.toString().padStart(2, '0') : minutes.toString();
+    
         // Condicional para decidir el formato
         if (hours > 0) {
-            return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+            // Formato H:MM:SS si hay horas
+            return `${hours}:${formattedMinutes}:${formattedSeconds}`;
         } else {
+            // Formato M:SS si no hay horas
             return `${formattedMinutes}:${formattedSeconds}`;
         }
     }
-    /**@param {string} sessionID */
-    generateSessionLink(sessionID) {
-        let querys = this.url.search.split('')
-        return this.url.origin + this.url.pathname + '?session=' + sessionID + '&' + querys.splice(1, querys.length - 1).join("")
-    }
+    
+    
+    
     builtData() {
-        return { platform: this.platform, url: this.url.href, data: this.data, time:this.time }
+        return { id:this.ID,platform: this.platform, url: this.url.href, data: this.data, time:this.time, formatedTime:this.formatTime() }
     }
     delete() {
         this.ID = undefined
@@ -58,5 +58,4 @@ class Source {
         this.time = undefined
     }
 }
-
 export default Source

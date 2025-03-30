@@ -8,10 +8,16 @@ class Notification{
          * @type {{time:number,userID:string|undefined,type:string}}
          * @description Contexto de la notificacion
          */
-        this.context=context
-        this.context.type='notification'
+        this.context={type:'notification',time:context.time,userID:context.userID}
         /**@type {string} */
         this.message=message
+    }
+    build(){
+        return {context:this.context,message:this.message}
+    }
+    remove(){
+        this.context=undefined
+        this.message=undefined
     }
 }
 export default Notification
