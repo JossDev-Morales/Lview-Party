@@ -37,7 +37,8 @@ app.use(morgan('combined'));
 app.use(cors({
     origin: [
       "chrome-extension://mbahalmfdfjdfhdeckclkfpnfebdpghe",  // Permitir la extensión
-      "https://lview-party.onrender.com"  // Permitir el frontend en producción (si aplica)
+      "https://lview-party.onrender.com",  // Permitir el frontend en producción (si aplica)
+      "http://127.0.0.1:5500"
     ],
     credentials: true
   }));
