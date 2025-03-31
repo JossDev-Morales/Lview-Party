@@ -9,6 +9,7 @@ import { Icons } from "../tools/IconGenerator.js";
 import AuthValidations from "../validations/auth.validations.service.js";
 import UserValidations from "../validations/user.validations.service.js";
 import { errors } from "celebrate";
+import fs from "fs";
 const UserRouter = express.Router();
 function init({ io }) {
     UserRouter.get("/api/icons/rawlist", AuthValidations.authToken, authTokenMdwr, async (req, res, next) => {
