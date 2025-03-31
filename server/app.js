@@ -34,7 +34,13 @@ const io = new Server(server, {
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use(morgan('combined'));
-app.use(cors());
+app.use(cors({
+    origin: [
+      "chrome-extension://mbahalmfdfjdfhdeckclkfpnfebdpghe",  // Permitir la extensión
+      "https://lview-party.onrender.com"  // Permitir el frontend en producción (si aplica)
+    ],
+    credentials: true
+  }));
 // Log de conexión
 io.use(socketAuth)
 // session
