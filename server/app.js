@@ -407,6 +407,9 @@ io.on('connection', async (socket) => {
 app.get("/app", (req, res) => {
     res.sendFile(path.join(__dirname, 'app', 'index.html'));
 })
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+  });
 app.use(AuthRouter)
 app.use(UserRouter({io}))
 app.use(errorHandlerMdwr)
