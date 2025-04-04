@@ -12,6 +12,7 @@ import { errors } from "celebrate";
 import fs from "fs";
 import { SessionError } from "../errorsHandler/SessionError.class.js";
 import path from "path";
+import { ROOT_DIR } from "../tools/filesData.js";
 const UserRouter = express.Router();
 function init({ io }) {
     UserRouter.get("/api/icons/rawlist", AuthValidations.authToken, authTokenMdwr, async (req, res, next) => {
