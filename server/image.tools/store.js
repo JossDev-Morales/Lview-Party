@@ -1,17 +1,25 @@
-import multer, {diskStorage} from 'multer'
-import {v4} from 'uuid'
-import {extname} from 'path'
-const imageStorage=diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,'uploads/')
+import multer, { diskStorage } from 'multer'
+import fs from 'fs'
+import { v4 } from 'uuid'
+import { extname } from 'path'
+const imageStorage = diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/')
     },
-    filename:(req,file,cb)=>{
-        cb(null,`${v4()}${extname(file.originalname)}`)
+    filename: (req, file, cb) => {
+        cb(null, `${v4()}${extname(file.originalname)}`)
     }
 })
-const uploader=multer({
-    storage:imageStorage,
-    fileFilter:(req, file, cb) => {
+const uploader = multer({
+    storage: imageStorage,
+    fileFilter: (req, file, cb) => {
+        const path = 'uploads';
+
+        // Si no existe, crear la carpeta uploads
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(path, { recursive: true });
+        }
+
         const allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
         if (allowedMimes.includes(file.mimetype)) {
             cb(null, true);
@@ -20,7 +28,7 @@ const uploader=multer({
         }
     },
     limits: {
-        fields:0,
+        fields: 0,
         fileSize: 8 * 1024 * 1024, // Maximo 8 MB por archivo
         files: 20,                 // Maximo 20 archivos por solicitud
         fieldSize: 100 * 1024 * 1024, // Maximo 100 MB en el campo de archivos
