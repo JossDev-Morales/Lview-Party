@@ -13,6 +13,7 @@ import fs from "fs";
 import { SessionError } from "../errorsHandler/SessionError.class.js";
 import path from "path";
 import { ROOT_DIR } from "../tools/filesData.js";
+import ImageItem from "../virtualdata/messagestype/image.body.js";
 const UserRouter = express.Router();
 function init({ io }) {
     UserRouter.get("/api/icons/rawlist", AuthValidations.authToken, authTokenMdwr, async (req, res, next) => {
