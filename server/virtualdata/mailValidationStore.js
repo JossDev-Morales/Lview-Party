@@ -1,7 +1,7 @@
 import { sendVerifyMail } from '../services/mailer.services.js';
 
-const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid');
+import jwt from 'jsonwebtoken'
+import { v4 as uuidv4 } from 'uuid'
 
 class MailVerifier {
     constructor() {
