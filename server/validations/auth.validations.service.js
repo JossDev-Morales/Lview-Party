@@ -5,6 +5,7 @@ export default class AuthValidations {
             name: Joi.string().trim().min(4).max(14).required(),
             email: Joi.string().email().required(),
             password: Joi.string().min(8).required(),
+            token:  Joi.string().required()
         }),
     })
     static signinValidation = celebrate({
