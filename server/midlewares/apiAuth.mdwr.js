@@ -121,7 +121,7 @@ export async function validateVerificationCode(req, res, next) {
         const decodedData = jwt.verify(token, process.env.SECRET_KEY);
         let verifiedToken=mailValidationStore.validate(decodedData.id,code)
         if(verifiedToken){
-            res.status(200).json({token})
+            res.status(200).json({token:verifiedToken})
         }
         throw new Error("Validation failed")
     } catch (error) {
