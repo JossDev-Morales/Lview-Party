@@ -43,7 +43,7 @@ export function sendVerifyMail(to, code) {
       if (error) {
         return console.error('Error al enviar:', error);
       }
-      console.log('Correo enviado:', info.messageId);
+      console.log('Correo enviado:', info.messageId,to);
     });
   } catch (error) {
     throw error
