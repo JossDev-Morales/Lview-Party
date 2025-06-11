@@ -1,0 +1,74 @@
+import { sendVerifyMail } from '../services/mailer.services';
+
+const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
+
+class MailVerifier {
+    constructor() {
+        this.list = [];
+        this.CODE_EXPIRATION_MS = 5 * 60 * 1000; // 5 minutos
+    }
+
+    generateCode(length = 5) {
+        const max = Math.pow(10, length);
+        const code = Math.floor(Math.random() * max);
+        return code.toString().padStart(length, '0');
+    }
+
+    request(mail) {
+        try {
+            const id = uuidv4();
+            const code = this.generateCode();
+            const exp = Date.now() + this.CODE_EXPIRATION_MS;
+
+            const req = { id, mail, code, exp };
+            this.list.push(req);
+
+            sendVerifyMail(mail, code)
+            // Token para identificar esta solicitud de verificación
+            const token = jwt.sign({ id, mail }, process.env.SECRET_KEY, { expiresIn: "5m" });
+
+            // Aquí normalmente enviarías el código por correo
+            console.log(`[MAIL_VERIFICATION] Código para ${mail}: ${code}`);
+
+            return token;
+        } catch (error) {
+            throw error
+        }
+    }
+
+    validate(id, code) {
+        const reqIndex = this.list.findIndex(r => r.id === id);
+        if (reqIndex === -1) {
+            console.warn(`[VALIDATION] No se encontró la solicitud con id ${id}`);
+            return null;
+        }
+
+        const req = this.list[reqIndex];
+
+        if (Date.now() > req.exp) {
+            console.warn(`[VALIDATION] Código expirado para ${req.mail}`);
+            this.list.splice(reqIndex, 1); // Limpia entrada expirada
+            return null;
+        }
+
+        if (req.code !== code) {
+            console.warn(`[VALIDATION] Código incorrecto para ${req.mail}`);
+            return null;
+        }
+
+        // Validación exitosa
+        this.list.splice(reqIndex, 1); // Elimina para evitar reutilización
+
+        const payload = {
+            mail: req.mail,
+            verifiedAt: Date.now()
+        };
+
+        // Token que representa un correo verificado (validez corta)
+        const verifiedToken = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "10m" });
+
+        return verifiedToken;
+    }
+}
+export default new MailVerifier()
