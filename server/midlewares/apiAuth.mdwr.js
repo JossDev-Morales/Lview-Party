@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
-const { JsonWebTokenError, decode,TokenExpiredError, verify } = jwt
+const { JsonWebTokenError, decode, TokenExpiredError, verify } = jwt
 import { AuthError } from "../errorsHandler/AuthError.class.js";
 import { authService } from "../services/auth.services.js";
 import { hasTokenExpired } from "../tools/tokenExpired.js";
 import refresher from "../tools/refreshTokens.js";
+import mailValidationStore from "../virtualdata/mailValidationStore.js";
 
 export async function authTokenMdwr(req, res, next) {
     try {
@@ -95,6 +96,39 @@ export async function authTokenMdwr(req, res, next) {
         next(error);
     }
 }
+export async function requestMailVerification(req, res, next) {
+    try {
+        const { mail } = req.params
+        if (!mail) {
+            throw new Error("You need to send a mail")
+        }
+        let token = mailValidationStore.request(mail)
+        res.status(200).json({token})
+    } catch (error) {
+        next(error)
+    }
+}
+
+export async function validateVerificationCode(req, res, next) {
+    try {
+        const { code, token } = req.body;
+
+        if (!code || !token) {
+            return res.status(400).json({ error: 'Código o token faltante' });
+        }
+
+        // Verifica el token (el token fue generado en el método `request`)
+        const decodedData = jwt.verify(token, process.env.SECRET_KEY);
+        let verifiedToken=mailValidationStore.validate(decodedData)
+        if(verifiedToken){
+            res.status(200).json({token})
+        }
+        throw new Error("Validation failed")
+    } catch (error) {
+        next(error)
+    }
+}
+
 /*
 export async function authTokenMdwr(req, res, next) {
     try {

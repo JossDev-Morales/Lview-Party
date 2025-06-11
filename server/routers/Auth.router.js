@@ -6,7 +6,7 @@ import { authService } from "../services/auth.services.js";
 import { Icons } from "../tools/IconGenerator.js";
 import { hasTokenExpired } from "../tools/tokenExpired.js";
 import refresher from "../tools/refreshTokens.js";
-import { authTokenMdwr } from "../midlewares/apiAuth.mdwr.js";
+import { authTokenMdwr, requestMailVerification, validateVerificationCode } from "../midlewares/apiAuth.mdwr.js";
 import prisma from "../../prisma/postgresClient.js";
 import { compare } from "bcrypt";
 import AuthValidations from "../validations/auth.validations.service.js";
@@ -18,8 +18,15 @@ AuthRouter.post('/', async (req, res) => {
 })
 AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req, res, next) => {
     try {
-        const { email, password, name } = req.body;
-
+        const { email, password, name, token } = req.body;
+        if(token){
+            throw new AuthError({
+                name: "MissingData",
+                message: "You need to provide a mailValidationToken at the token key to ensure the mail was verified",
+                type: "InvalidData",
+                code: 5,
+            });
+        }
         // Validación de los datos de entrada
         if (!email || !password || !name) {
             throw new AuthError({
@@ -29,8 +36,19 @@ AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req
                 code: 5,
             });
         }
+        const decoded = jwt.verify(verificationToken, process.env.SECRET_KEY);
+
+        // Comparar correos en minúsculas por seguridad
+        if (decoded.mail.toLowerCase() !== email.toLowerCase()) {
+            throw new AuthError({
+                name: "InvalidMailToken",
+                message: "This mail token doesn't verify the signup mail",
+                type: "InvalidToken",
+                code: 8,
+            });
+        }
         // Verificar si el usuario ya existe
-        const existingUser = await UserServices.getUserByMail(email);
+        const existingUser = await UserServices.getUserByMail(email.toLowerCase());
         if (existingUser) {
             throw new AuthError({
                 name: "UserExists",
@@ -39,7 +57,7 @@ AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req
                 code: 6,
             });
         }
-        const user = await UserServices.createUser({ email, password, name });
+        const user = await UserServices.createUser({ email:email.toLowerCase(), password, name });
         const accesToken = sign({ ID: user.id, type: 'access' }, process.env.SECRET_KEY, { expiresIn: '2d' })
         const refreshToken = sign({ ID: user.id, type: 'refresh' }, process.env.SECRET_KEY, { expiresIn: '4d' })
         // Generar los tokens
@@ -232,4 +250,8 @@ AuthRouter.get("/api/auth/me/renew", AuthValidations.authToken, async (req, res,
         next(error)
     }
 },errors)
+
+// servicio de validacion de mails
+AuthRouter.get("/api/auth/verifier/mail/request",requestMailVerification)
+AuthRouter.post("/api/auth/verifier/mail/validate",validateVerificationCode)
 export default AuthRouter
