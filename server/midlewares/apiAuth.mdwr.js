@@ -119,7 +119,7 @@ export async function validateVerificationCode(req, res, next) {
 
         // Verifica el token (el token fue generado en el método `request`)
         const decodedData = jwt.verify(token, process.env.SECRET_KEY);
-        let verifiedToken=mailValidationStore.validate(decodedData)
+        let verifiedToken=mailValidationStore.validate(decodedData.id,code)
         if(verifiedToken){
             res.status(200).json({token})
         }
