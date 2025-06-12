@@ -36,13 +36,13 @@ AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req
                 code: 5,
             });
         }
-        const decoded = jwt.verify(verificationToken, process.env.SECRET_KEY);
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
         // Comparar correos en minúsculas por seguridad
         if(!decoded.verifiedAt){
             throw new AuthError({
                 name: "InvalidMailToken",
-                message: "This mail token doesn't verify the signup mail",
+                message: "This is not a mail verification token",
                 type: "InvalidToken",
                 code: 8,
             });
@@ -50,7 +50,7 @@ AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req
         if (decoded.mail.toLowerCase() !== email.toLowerCase()) {
             throw new AuthError({
                 name: "InvalidMailToken",
-                message: "This is not a mail verication token",
+                message: "This mail token doesn't verify the signup mail",
                 type: "InvalidToken",
                 code: 8,
             });
