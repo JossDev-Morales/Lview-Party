@@ -99,6 +99,7 @@ export async function authTokenMdwr(req, res, next) {
 export async function requestMailVerification(req, res, next) {
     try {
         const { mail } = req.body
+        console.log(req.body)
         if (!mail) {
             throw new Error("You need to send a mail")
         }
