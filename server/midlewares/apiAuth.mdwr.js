@@ -5,6 +5,7 @@ import { authService } from "../services/auth.services.js";
 import { hasTokenExpired } from "../tools/tokenExpired.js";
 import refresher from "../tools/refreshTokens.js";
 import mailValidationStore from "../virtualdata/mailValidationStore.js";
+import { UserServices } from "../services/user.services.js";
 
 export async function authTokenMdwr(req, res, next) {
     try {
@@ -103,6 +104,15 @@ export async function requestMailVerification(req, res, next) {
         if (!mail) {
             throw new Error("You need to send a mail")
         }
+        let user=await UserServices.getUserByMail(mail.toLowerCase())
+        if(user){
+            throw new AuthError({
+                name: "UserExists",
+                message: "User with this email already exists",
+                type: "InvalidData",
+                code: 6,
+            });
+        }
         let token = mailValidationStore.request(mail)
         res.status(200).json({token})
     } catch (error) {
@@ -123,8 +133,9 @@ export async function validateVerificationCode(req, res, next) {
         let verifiedToken=mailValidationStore.validate(decodedData.id,code)
         if(verifiedToken){
             res.status(200).json({token:verifiedToken})
+        } else {
+            throw new Error("Validation failed")
         }
-        throw new Error("Validation failed")
     } catch (error) {
         next(error)
     }
