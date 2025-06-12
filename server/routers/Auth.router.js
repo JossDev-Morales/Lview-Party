@@ -260,6 +260,6 @@ AuthRouter.get("/api/auth/me/renew", AuthValidations.authToken, async (req, res,
 },errors)
 
 // servicio de validacion de mails
-AuthRouter.get("/api/auth/verifier/mail/request",requestMailVerification)
+AuthRouter.post("/api/auth/verifier/mail/request",requestMailVerification)
 AuthRouter.post("/api/auth/verifier/mail/validate",validateVerificationCode)
 export default AuthRouter
