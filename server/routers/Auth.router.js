@@ -19,7 +19,7 @@ AuthRouter.post('/', async (req, res) => {
 AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req, res, next) => {
     try {
         const { email, password, name, token } = req.body;
-        if(token){
+        if(!token){
             throw new AuthError({
                 name: "MissingData",
                 message: "You need to provide a mailValidationToken at the token key to ensure the mail was verified",
