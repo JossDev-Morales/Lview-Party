@@ -328,14 +328,6 @@ AuthRouter.post("/api/auth/recovery/reset",async (req, res, next) => {
                 code: 8,
             });
         }
-        if (decoded.mail.toLowerCase() !== email.toLowerCase()) {
-            throw new AuthError({
-                name: "InvalidMailToken",
-                message: "This token is invalid",
-                type: "InvalidToken",
-                code: 8,
-            });
-        }
         let user = await UserServices.getUserByMail(decoded.mail)
         authService.updatePassword(user.id,password)
         res.status(200)
