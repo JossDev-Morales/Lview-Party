@@ -11,8 +11,8 @@ import prisma from "../../prisma/postgresClient.js";
 import { compare } from "bcrypt";
 import AuthValidations from "../validations/auth.validations.service.js";
 import {errors} from "celebrate"
-import { signUpMail } from "../services/mailer.services.js";
 import OTPStore from '../virtualdata/mailValidationStore.js'
+import { signUpMail } from "../services/mailer.services.js";
 const { JsonWebTokenError, sign, verify } = jwt
 const AuthRouter = express.Router();
 AuthRouter.post('/', async (req, res) => {
