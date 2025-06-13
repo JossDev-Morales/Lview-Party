@@ -417,7 +417,8 @@ io.on('connection', async (socket) => {
 app.get('/health', (req, res) => {
     res.status(200).send('OK');
   });
-const distPath = path.resolve(__dirname, '../client/dist')
+const distPath = path.resolve(__dirname, '../../client/dist')
+
 app.use(express.static(distPath))
 
 app.use(AuthRouter)
