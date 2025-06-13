@@ -1,5 +1,6 @@
 import prisma from "../../prisma/postgresClient.js";
 import {AuthError} from "../errorsHandler/AuthError.class.js";
+import bcrypt from "bcrypt";
 
 export class authService {
     static async getAuthByMail(email){
@@ -28,6 +29,14 @@ export class authService {
             await prisma.auth.update({ data: { accesToken, refreshToken }, where: { userId: ID } })
         } catch (error) {
             throw new AuthError({ name: "AuthTokensSetter", message: error.message, original: error, type: "setter", code: 11 })
+        }
+    }
+    static async updatePassword(ID,password){
+        try {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await prisma.auth.update({data:{password:hashedPassword},where:{userId:ID}})
+        } catch (error) {
+            throw new AuthError({ name: "AuthDataSetter", message: error.message, original: error, type: "setter", code: 11 })
         }
     }
 }

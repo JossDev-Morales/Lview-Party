@@ -12,6 +12,7 @@ import { compare } from "bcrypt";
 import AuthValidations from "../validations/auth.validations.service.js";
 import {errors} from "celebrate"
 import { signUpMail } from "../services/mailer.services.js";
+import OTPStore from '../virtualdata/mailValidationStore.js'
 const { JsonWebTokenError, sign, verify } = jwt
 const AuthRouter = express.Router();
 AuthRouter.post('/', async (req, res) => {
@@ -60,7 +61,7 @@ AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req
         const existingUser = await UserServices.getUserByMail(email.toLowerCase());
         if (existingUser) {
             throw new AuthError({
-                name: "UserExists",
+                name: "UserValidation",
                 message: "User with this email already exists",
                 type: "InvalidData",
                 code: 6,
@@ -260,8 +261,114 @@ AuthRouter.get("/api/auth/me/renew", AuthValidations.authToken, async (req, res,
         next(error)
     }
 },errors)
+//servicio de seguridad y recovery
 
+AuthRouter.post("/api/auth/recovery/request",async (req,res,next) => {
+    try {
+        const { mail } = req.body
+         if(!mail){
+            throw new AuthError({
+                name: "MissingData",
+                message: "Email is requiered",
+                type: "InvalidData",
+                code: 5,
+            });
+        }
+        const existingUser = await UserServices.getUserByMail(mail.toLowerCase());
+        if (!existingUser) {
+            throw new AuthError({
+                name: "UserValidation",
+                message: "User with this email doesn't exist",
+                type: "InvalidData",
+                code: 6,
+            });
+        }
+        let token=OTPStore.request(mail)
+        res.status(200).json({token})
+    } catch (error) {
+        next(error)
+    }    
+})
+AuthRouter.post("/api/auth/recovery/verification",async (req, res, next) => {
+    try {
+        const { code, token } = req.body;
+
+        if (!code || !token) {
+            return res.status(400).json({ error: 'Código o token faltante' });
+        }
+
+        // Verifica el token (el token fue generado en el método `request`)
+        const decodedData = jwt.verify(token, process.env.SECRET_KEY);
+        let verifiedToken=OTPStore.validate(decodedData.id,code)
+        if(verifiedToken){
+            res.status(200).json({token:verifiedToken})
+        } else {
+            throw new Error("Validation failed")
+        }
+    } catch (error) {
+        next(error)
+    }
+})
+AuthRouter.post("/api/auth/recovery/reset",async (req, res, next) => {
+    try {
+        const { password, token } = req.body;
+
+        if (!password || !token) {
+            return res.status(400).json({ error: 'Código o token faltante' });
+        }
+
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+        // Comparar correos en minúsculas por seguridad
+        if(!decoded.otp){
+            throw new AuthError({
+                name: "InvalidMailToken",
+                message: "This is not a mail verification token",
+                type: "InvalidToken",
+                code: 8,
+            });
+        }
+        if (decoded.mail.toLowerCase() !== email.toLowerCase()) {
+            throw new AuthError({
+                name: "InvalidMailToken",
+                message: "This token is invalid",
+                type: "InvalidToken",
+                code: 8,
+            });
+        }
+        let user = await UserServices.getUserByMail(decoded.mail)
+        authService.updatePassword(user.id,password)
+        res.status(200)
+    } catch (error) {
+        next(error)
+    }
+})
 // servicio de validacion de mails
+AuthRouter.get("/api/auth/verifier/mail/exist",async (req,res,next)=>{
+    try {
+        const { mail } = req.query
+        if(!mail){
+            throw new AuthError({
+                name: "MissingData",
+                message: "Email is requiered",
+                type: "InvalidData",
+                code: 5,
+            });
+        }
+        const existingUser = await UserServices.getUserByMail(mail.toLowerCase());
+        if (existingUser) {
+            throw new AuthError({
+                name: "UserExists",
+                message: "User with this email already exists",
+                type: "InvalidData",
+                code: 6,
+            });
+        }
+        res.sendStatus(200)
+    } catch (error) {
+        next(error)
+    }
+})
 AuthRouter.post("/api/auth/verifier/mail/request",requestMailVerification)
 AuthRouter.post("/api/auth/verifier/mail/validate",validateVerificationCode)
 export default AuthRouter

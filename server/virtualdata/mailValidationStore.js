@@ -3,7 +3,7 @@ import { sendVerifyMail } from '../services/mailer.services.js';
 import jwt from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
 
-class MailVerifier {
+class OTPStore {
     constructor() {
         this.list = [];
         this.CODE_EXPIRATION_MS = 5 * 60 * 1000; // 5 minutos
@@ -62,7 +62,8 @@ class MailVerifier {
 
         const payload = {
             mail: req.mail,
-            verifiedAt: Date.now()
+            verifiedAt: Date.now(),
+            otp:true
         };
 
         // Token que representa un correo verificado (validez corta)
@@ -71,4 +72,4 @@ class MailVerifier {
         return verifiedToken;
     }
 }
-export default new MailVerifier()
+export default new OTPStore()
