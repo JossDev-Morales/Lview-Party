@@ -15,6 +15,7 @@ import { errorHandlerMdwr } from './midlewares/apiErrorHandler.mdwr.js';
 import path from 'path';
 import AuthRouter from './routers/Auth.router.js';
 import UserRouter from './routers/User.router.js';
+import { __dirname } from './tools/filesData.js';
 configDotenv()
 const PORT = process.env.PORT ?? "3000";
 const app = express();
