@@ -314,7 +314,7 @@ AuthRouter.post("/api/auth/recovery/reset",async (req, res, next) => {
         const { password, token } = req.body;
 
         if (!password || !token) {
-            return res.status(400).json({ error: 'Código o token faltante' });
+            return res.status(400).json({ error: 'Password o token faltante' });
         }
 
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
@@ -330,7 +330,7 @@ AuthRouter.post("/api/auth/recovery/reset",async (req, res, next) => {
         }
         let user = await UserServices.getUserByMail(decoded.mail)
         authService.updatePassword(user.id,password)
-        res.status(200)
+        res.status(200).send()
     } catch (error) {
         next(error)
     }
