@@ -1,0 +1,33 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url(./assets/fonts/Montserrat-VariableFont_wght.ttf)
+    format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Bebas Neue";
+  src: url(./assets/fonts/BebasNeue-Regular.ttf) format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Exo 2";
+  src: url(./assets/fonts/Exo-VariableFont_wght.ttf) format("truetype");
+  font-display: swap;
+  font-weight: 100 900;
+}
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
+}
+html {
+  font-size: 16px;
+  color: #fafafa;
+  font-family: "Montserrat", sans-serif;
+  transition: all 0.3s ease;
+}
+#root{
+  width: 100vw;
+  height: 100vh;
+}

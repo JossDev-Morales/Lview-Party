@@ -1,0 +1,21 @@
+.page{
+  width: 100%;
+  height: 100%;
+}
+.center-full{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btnPrimary{
+  background-color: #6e7cfd;
+  color: #f3f3f3;
+  font-family: 'Montserrat', sans-serif;
+}
+.btnPrimary:hover{
+  background-color: #6473fd;
+  transition: all .2s ease;
+}
+.montserrat{
+  font-family: "Montserrat";
+}
