@@ -2,9 +2,9 @@ import axios from 'axios'
 export async function recoveryRequest(mail) {
     try {
         let headersList = {
-            "Content-Type": mail
+            "Content-Type": "application/json"
         }
-        let bodyContent = JSON.stringify({ "mail": "thejosuescript@gmail.com" });
+        let bodyContent = JSON.stringify({ "mail": mail });
 
         let reqOptions = {
             url: "https://lview-party.onrender.com/api/auth/recovery/request",
@@ -19,12 +19,12 @@ export async function recoveryRequest(mail) {
         throw error
     }
 }
-export async function recoveryValidation(token,otp){
+export async function recoveryValidation(token, otp) {
     try {
         let headersList = {
             "Content-Type": "application/json"
         }
-        let bodyContent = JSON.stringify({ "token": token,"code":otp });
+        let bodyContent = JSON.stringify({ "token": token, "code": otp });
 
         let reqOptions = {
             url: "https://lview-party.onrender.com/api/auth/recovery/verification",
