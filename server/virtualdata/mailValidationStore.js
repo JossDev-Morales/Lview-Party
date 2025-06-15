@@ -2,6 +2,7 @@ import { sendVerifyMail } from '../services/mailer.services.js';
 
 import jwt from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
+import { AuthError } from '../errorsHandler/AuthError.class.js';
 
 class OTPStore {
     constructor() {
@@ -38,10 +39,11 @@ class OTPStore {
     }
 
     validate(id, code) {
-        const reqIndex = this.list.findIndex(r => r.id === id);
+        try {
+            const reqIndex = this.list.findIndex(r => r.id === id);
         if (reqIndex === -1) {
             console.warn(`[VALIDATION] No se encontró la solicitud con id ${id}`);
-            return null;
+            throw new AuthError({name:"RequestNotFound",message:"Seems like this OTP was already used",code:8})
         }
 
         const req = this.list[reqIndex];
@@ -49,12 +51,11 @@ class OTPStore {
         if (Date.now() > req.exp) {
             console.warn(`[VALIDATION] Código expirado para ${req.mail}`);
             this.list.splice(reqIndex, 1); // Limpia entrada expirada
-            return null;
+            throw new AuthError({name:"OTPExpired",message:"This OTP expired",code:6})
         }
-
         if (req.code !== code) {
             console.warn(`[VALIDATION] Código incorrecto para ${req.mail}`);
-            return null;
+            throw new AuthError({name:"InvalidOTPCode",message:"Wrong code buddy! try again.",code:9})
         }
 
         // Validación exitosa
@@ -70,6 +71,9 @@ class OTPStore {
         const verifiedToken = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "10m" });
 
         return verifiedToken;
+        } catch (error) {
+            throw error
+        }
     }
 }
 export default new OTPStore()

@@ -127,7 +127,7 @@ AuthRouter.post("/api/auth/signin", AuthValidations.signinValidation ,async (req
                 name: "InvalidCredentials",
                 message: "Invalid password",
                 type: "AuthError",
-                code: 6
+                code: 9
             });
         }
         const user = await UserServices.getUserByMail(email);
