@@ -16,7 +16,7 @@ import {
 import success from '../assets/success-process.svg'
 import mailSent from '../assets/mail-sent.svg'
 export default function Recovery() {
-  const [stage, setStage] = useState(1);
+  const [stage, setStage] = useState(0);
   const [stageError, setStageError] = useState(false);
   const [searchParams] = useSearchParams();
   const mailParam = searchParams.get("mail");
