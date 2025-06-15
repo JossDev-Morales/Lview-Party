@@ -190,7 +190,7 @@ export default function Recovery() {
                     return;
                   }
                   setLoading(true);
-                  let token = await recoveryValidation(requestToken, OTP);
+                  let token = await recoveryValidation(requestToken, OTP.join(''));
                   setResetToken(token);
                   setStage(2); // avanzar al formulario de cambio
                 } catch (error) {
