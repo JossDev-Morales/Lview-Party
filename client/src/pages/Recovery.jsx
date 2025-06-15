@@ -137,7 +137,7 @@ export default function Recovery() {
                   if (error.code == "ERR_NETWORK") {
                     setAlert("Network error");
                   } else if (error.status === 400) {
-                    alert(error.response?.data?.message);
+                    setAlert(error.response?.data?.message);
                   }
                 } finally {
                   setLoading(false);
@@ -198,7 +198,7 @@ export default function Recovery() {
                   if (error.code == "ERR_NETWORK") {
                     setAlert("Network error");
                   } else if (error.status === 400) {
-                    alert(error.response?.data?.message);
+                    setAlert(error.response?.data?.message);
                   }
                 } finally {
                   setLoading(false);
@@ -253,7 +253,7 @@ export default function Recovery() {
                   if (error.code == "ERR_NETWORK") {
                     setAlert("Network error");
                   } else if (error.status === 400) {
-                    alert(error.response?.data?.message);
+                    setAlert(error.response?.data?.message);
                   }
                 } finally {
                   setLoading(false);
