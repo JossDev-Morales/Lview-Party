@@ -245,7 +245,7 @@ export default function Recovery() {
                         return;
                     }
                     setLoading(true)
-                    await resetPassword(resetTokeN,password1)
+                    await resetPassword(resetToken,password1)
                     setLoading(false)
                     setStage(3)
                 } catch (error) {
