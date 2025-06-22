@@ -32,9 +32,8 @@ function init({ io }) {
         } catch (error) {
             next(error)
         }
-    },errors)
-    // TODO agregar validaciones a los valores del icono
-    UserRouter.post("/api/icons/select", AuthValidations.authToken, UserValidations.iconSelection, authTokenMdwr, async (req, res, next) => {
+    }, errors)
+    UserRouter.put("/api/user/update", AuthValidations.authToken, UserValidations.userUpdate, authTokenMdwr, async (req, res, next) => {
         try {
             const userID = req.tokenPayload.ID
             const user = await UserServices.getUserById(userID)
@@ -46,36 +45,22 @@ function init({ io }) {
                     code: 5
                 });
             }
-            const { seed, style } = req.body
-            await UserServices.updateIcon(userID, { seed, style })
+            const { icon, name, color } = req.body
+            if (icon) {
+                const { seed, style } = req.body
+                await UserServices.updateIcon(userID, { seed, style })
+            }
+            if(name){
+                await UserServices.updateName(userID, { name })
+            }
+            if(color){
+                await UserServices.updateColor(userID, { color})
+            }
             res.status(200).send()
         } catch (error) {
             next(error)
         }
-    },errors)
-    // TODO agregar validaciones al valor name
-    UserRouter.put("/api/name", AuthValidations.authToken, UserValidations.changeName, authTokenMdwr, async (req, res, next) => {
-        try {
-            const { name } = req.body
-            if (!name) {
-                throw new AuthError({ code: 9, name: "MissingData", message: "The new name is neccesary in order to change it", type: "invalidData" })
-            }
-            const userID = req.tokenPayload.ID
-            const user = await UserServices.getUserById(userID)
-            if (!user) {
-                throw new AuthError({
-                    name: "userNotFound",
-                    message: "The token belongs to an user that not longer exist",
-                    type: "InexistentUser",
-                    code: 5
-                });
-            }
-            await UserServices.updateName(userID, { name })
-            res.status(200).send()
-        } catch (error) {
-            next(error)
-        }
-    },errors)
+    })
     UserRouter.post("/api/image/session/:session/message/:message/content/:content", UserValidations.addContent, uploader.single('image'), (req, res, next) => {
         try {
             const { session, message, content } = req.params
@@ -108,7 +93,7 @@ function init({ io }) {
         } catch (error) {
             next(error)
         }
-    }, multerErrorHandler,errors)
+    }, multerErrorHandler, errors)
     UserRouter.get("/api/image/session/:session/message/:message/content/:content", UserValidations.addContent, (req, res, next) => {
         try {
             const { session, message, content } = req.params
@@ -129,7 +114,7 @@ function init({ io }) {
         } catch (error) {
             next(error)
         }
-    },errors)
+    }, errors)
     UserRouter.post('/api/collection/session/:session/message/:message/content/:content', UserValidations.addContent, uploader.array('image'), (req, res, next) => {
         try {
             const { session, message, content } = req.params
@@ -168,7 +153,7 @@ function init({ io }) {
         } catch (error) {
             next(error)
         }
-    }, multerErrorHandler,errors)
+    }, multerErrorHandler, errors)
     UserRouter.get("/api/collection/session/:session/message/:message/content/:content", UserValidations.addContent, (req, res, next) => {
         try {
             const { session, message, content } = req.params
@@ -197,7 +182,7 @@ function init({ io }) {
         } catch (error) {
             next(error)
         }
-    },errors)
+    }, errors)
     UserRouter.get("/api/image/:name", UserValidations.getImage, (req, res, next) => {
         const { name } = req.params
         if (!name || !name.split('.')[1]) {
@@ -216,7 +201,7 @@ function init({ io }) {
                 next(err)
             }
         })
-    },errors)
+    }, errors)
     let twemojiMemoryPoint;
     UserRouter.get("/api/emojis/twemoji", (req, res, next) => {
         try {
