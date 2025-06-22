@@ -48,21 +48,28 @@ export class UserServices {
     }
     static async updateIcon(ID, { seed, style }) {
         try {
-            const update = await prisma.user.update({ where: { id: ID }, data: { icon: seed, iconStyle: style } })
+            await prisma.user.update({ where: { id: ID }, data: { icon: seed, iconStyle: style } })
         } catch (error) {
             throw error
         }
     }
     static async updateName(ID, { name }) {
         try {
-            const update = await prisma.user.update({ where: { id: ID }, data: { name } })
+            await prisma.user.update({ where: { id: ID }, data: { name } })
+        } catch (error) {
+            throw error
+        }
+    }
+    static async updateColor(ID,{ color }){
+        try {
+            await prisma.user.update({where:{id:ID},data:{color:color}})
         } catch (error) {
             throw error
         }
     }
     static async updateSessionStatus(ID,{status}){
         try {
-            const update =await prisma.user.update({where:{id:ID},data:{inSession:status}}) 
+            await prisma.user.update({where:{id:ID},data:{inSession:status}}) 
         } catch (error) {
             throw error
         }
