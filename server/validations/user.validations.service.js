@@ -1,26 +1,25 @@
 import { Joi, Segments, celebrate } from 'celebrate'
 export default class UserValidations {
-    static iconSelection=celebrate({
-        body:Joi.object({
-            seed:Joi.string().required(),
-            style:Joi.string().required()
+    static userUpdate = celebrate({
+        body: Joi.object({
+            icon: Joi.object({
+                seed: Joi.string().required(),
+                style: Joi.string().required()
+            }),
+            name: Joi.string().trim().min(4).max(14),
+            color:Joi.string().pattern('^[a-fA-F0-9]{3}]$|^[a-fA-F0-9]{6}]$')
         })
     })
-    static changeName=celebrate({
-        body:Joi.object({
-            name: Joi.string().trim().min(4).max(14).required()
+    static addContent = celebrate({
+        params: Joi.object({
+            session: Joi.string().uuid({ version: 'uuidv4' }).required(),
+            message: Joi.string().uuid({ version: 'uuidv4' }).required(),
+            content: Joi.string().uuid({ version: 'uuidv4' }).required()
         })
     })
-    static addContent=celebrate({
-        params:Joi.object({
-            session:Joi.string().uuid({version:'uuidv4'}).required(),
-            message:Joi.string().uuid({version:'uuidv4'}).required(),
-            content:Joi.string().uuid({version:'uuidv4'}).required()
-        })
-    })
-    static getImage=celebrate({
-        params:Joi.object({
-            name:Joi.string().required()
+    static getImage = celebrate({
+        params: Joi.object({
+            name: Joi.string().required()
         })
     })
 }
