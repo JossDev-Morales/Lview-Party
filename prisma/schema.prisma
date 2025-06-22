@@ -20,6 +20,7 @@ model User {
   name                String
   icon                String?
   iconStyle           String?
+  color               String?
   isPremium           Boolean      @default(false)
   subscriptionType    String?
   inSession           Boolean      @default(false)
