@@ -7,7 +7,7 @@ export default class UserValidations {
                 style: Joi.string().required()
             }),
             name: Joi.string().trim().min(4).max(14),
-            color:Joi.string().pattern('^[a-fA-F0-9]{3}]$|^[a-fA-F0-9]{6}]$')
+            color:Joi.string().pattern(new RegExp('^[a-fA-F0-9]{3}]$|^[a-fA-F0-9]{6}]$'))
         })
     })
     static addContent = celebrate({
