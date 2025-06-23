@@ -10,7 +10,7 @@ import { authTokenMdwr, requestMailVerification, validateVerificationCode } from
 import prisma from "../../prisma/postgresClient.js";
 import { compare } from "bcrypt";
 import AuthValidations from "../validations/auth.validations.service.js";
-import {errors} from "celebrate"
+import { errors } from "celebrate"
 import OTPStore from '../virtualdata/mailValidationStore.js'
 import { signUpMail } from "../services/mailer.services.js";
 const { JsonWebTokenError, sign, verify } = jwt
@@ -18,10 +18,10 @@ const AuthRouter = express.Router();
 AuthRouter.post('/', async (req, res) => {
     res.json(await prisma.auth.findMany())
 })
-AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req, res, next) => {
+AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation, async (req, res, next) => {
     try {
         const { email, password, name, token } = req.body;
-        if(!token){
+        if (!token) {
             throw new AuthError({
                 name: "MissingData",
                 message: "You need to provide a mailValidationToken at the token key to ensure the mail was verified",
@@ -41,7 +41,7 @@ AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
         // Comparar correos en minúsculas por seguridad
-        if(!decoded.verifiedAt){
+        if (!decoded.verifiedAt) {
             throw new AuthError({
                 name: "InvalidMailToken",
                 message: "This is not a mail verification token",
@@ -67,7 +67,7 @@ AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req
                 code: 6,
             });
         }
-        const user = await UserServices.createUser({ email:email.toLowerCase(), password, name });
+        const user = await UserServices.createUser({ email: email.toLowerCase(), password, name });
         const accesToken = sign({ ID: user.id, type: 'access' }, process.env.SECRET_KEY, { expiresIn: '2d' })
         const refreshToken = sign({ ID: user.id, type: 'refresh' }, process.env.SECRET_KEY, { expiresIn: '4d' })
         // Generar los tokens
@@ -76,7 +76,7 @@ AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req
             refreshToken: refreshToken,
         };
         authService.setUserTokens(user.id, tokens)
-        signUpMail(email.toLowerCase(),name)
+        signUpMail(email.toLowerCase(), name)
         res.status(201).json({
             user: {
                 name: user.name,
@@ -85,14 +85,15 @@ AuthRouter.post("/api/auth/signup", AuthValidations.signupValidation ,async (req
                 subscriptionType: user.subscriptionType,
                 inSession: user.inSession,
                 isPremium: user.isPremium,
+                color: user.color
             },
             tokens,
         });
     } catch (error) {
         next(error);
     }
-},errors)
-AuthRouter.post("/api/auth/signin", AuthValidations.signinValidation ,async (req, res, next) => {
+}, errors)
+AuthRouter.post("/api/auth/signin", AuthValidations.signinValidation, async (req, res, next) => {
     try {
         const { email, password } = req.body;
         // Validación de email y password
@@ -145,7 +146,8 @@ AuthRouter.post("/api/auth/signin", AuthValidations.signinValidation ,async (req
                     id: user.id,
                     subscriptionType: user.subscriptionType,
                     inSession: user.inSession,
-                    isPremium: user.isPremium
+                    isPremium: user.isPremium,
+                    color: user.color
                 },
                 tokens
             });
@@ -167,7 +169,8 @@ AuthRouter.post("/api/auth/signin", AuthValidations.signinValidation ,async (req
                         id: user.id,
                         subscriptionType: user.subscriptionType,
                         inSession: user.inSession,
-                        isPremium: user.isPremium
+                        isPremium: user.isPremium,
+                        color: user.color
                     },
                     tokens
                 });
@@ -181,7 +184,8 @@ AuthRouter.post("/api/auth/signin", AuthValidations.signinValidation ,async (req
                     id: user.id,
                     subscriptionType: user.subscriptionType,
                     inSession: user.inSession,
-                    isPremium: user.isPremium
+                    isPremium: user.isPremium,
+                    color: user.color
                 },
                 tokens: {
                     accesToken: auth.accesToken,
@@ -192,8 +196,8 @@ AuthRouter.post("/api/auth/signin", AuthValidations.signinValidation ,async (req
     } catch (error) {
         next(error);
     }
-},errors);
-AuthRouter.get("/api/auth/me", AuthValidations.authToken ,authTokenMdwr, async (req, res, next) => {
+}, errors);
+AuthRouter.get("/api/auth/me", AuthValidations.authToken, authTokenMdwr, async (req, res, next) => {
     try {
         const userID = req.tokenPayload.ID
         const user = await UserServices.getUserById(userID)
@@ -207,12 +211,13 @@ AuthRouter.get("/api/auth/me", AuthValidations.authToken ,authTokenMdwr, async (
         }
         res.status(200).json({
             name: user.name, icon: Icons.genIcons(user.iconStyle, user.icon), id: user.id, subscriptionType: user.subscriptionType,
-            inSession: user.inSession, isPremium: user.isPremium
+            inSession: user.inSession, isPremium: user.isPremium,
+            color: user.color
         })
     } catch (error) {
         next(error)
     }
-},errors)
+}, errors)
 AuthRouter.get("/api/auth/me/renew", AuthValidations.authToken, async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
@@ -260,13 +265,13 @@ AuthRouter.get("/api/auth/me/renew", AuthValidations.authToken, async (req, res,
         }
         next(error)
     }
-},errors)
+}, errors)
 //servicio de seguridad y recovery
 
-AuthRouter.post("/api/auth/recovery/request",async (req,res,next) => {
+AuthRouter.post("/api/auth/recovery/request", async (req, res, next) => {
     try {
         const { mail } = req.body
-         if(!mail){
+        if (!mail) {
             throw new AuthError({
                 name: "MissingData",
                 message: "Email is requiered",
@@ -283,13 +288,13 @@ AuthRouter.post("/api/auth/recovery/request",async (req,res,next) => {
                 code: 6,
             });
         }
-        let token=OTPStore.request(mail)
-        res.status(200).json({token})
+        let token = OTPStore.request(mail)
+        res.status(200).json({ token })
     } catch (error) {
         next(error)
-    }    
+    }
 })
-AuthRouter.post("/api/auth/recovery/verification",async (req, res, next) => {
+AuthRouter.post("/api/auth/recovery/verification", async (req, res, next) => {
     try {
         const { code, token } = req.body;
 
@@ -299,9 +304,9 @@ AuthRouter.post("/api/auth/recovery/verification",async (req, res, next) => {
 
         // Verifica el token (el token fue generado en el método `request`)
         const decodedData = jwt.verify(token, process.env.SECRET_KEY);
-        let verifiedToken=OTPStore.validate(decodedData.id,code)
-        if(verifiedToken){
-            res.status(200).json({token:verifiedToken})
+        let verifiedToken = OTPStore.validate(decodedData.id, code)
+        if (verifiedToken) {
+            res.status(200).json({ token: verifiedToken })
         } else {
             throw new Error("Validation failed")
         }
@@ -309,7 +314,7 @@ AuthRouter.post("/api/auth/recovery/verification",async (req, res, next) => {
         next(error)
     }
 })
-AuthRouter.post("/api/auth/recovery/reset",async (req, res, next) => {
+AuthRouter.post("/api/auth/recovery/reset", async (req, res, next) => {
     try {
         const { password, token } = req.body;
 
@@ -320,7 +325,7 @@ AuthRouter.post("/api/auth/recovery/reset",async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
         // Comparar correos en minúsculas por seguridad
-        if(!decoded.otp){
+        if (!decoded.otp) {
             throw new AuthError({
                 name: "InvalidMailToken",
                 message: "This is not a mail verification token",
@@ -329,17 +334,17 @@ AuthRouter.post("/api/auth/recovery/reset",async (req, res, next) => {
             });
         }
         let user = await UserServices.getUserByMail(decoded.mail)
-        authService.updatePassword(user.id,password)
+        authService.updatePassword(user.id, password)
         res.status(200).send()
     } catch (error) {
         next(error)
     }
 })
 // servicio de validacion de mails
-AuthRouter.get("/api/auth/verifier/mail/exist",async (req,res,next)=>{
+AuthRouter.get("/api/auth/verifier/mail/exist", async (req, res, next) => {
     try {
         const { mail } = req.query
-        if(!mail){
+        if (!mail) {
             throw new AuthError({
                 name: "MissingData",
                 message: "Email is requiered",
@@ -361,6 +366,6 @@ AuthRouter.get("/api/auth/verifier/mail/exist",async (req,res,next)=>{
         next(error)
     }
 })
-AuthRouter.post("/api/auth/verifier/mail/request",requestMailVerification)
-AuthRouter.post("/api/auth/verifier/mail/validate",validateVerificationCode)
+AuthRouter.post("/api/auth/verifier/mail/request", requestMailVerification)
+AuthRouter.post("/api/auth/verifier/mail/validate", validateVerificationCode)
 export default AuthRouter
