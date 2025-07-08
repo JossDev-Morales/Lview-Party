@@ -56,7 +56,9 @@ function init({ io }) {
             if(color){
                 await UserServices.updateColor(userID, { color})
             }
-            res.status(200).send()
+            if(icon){
+                res.status(200).json(Icons.genIcons(icon.style,icon.seed))
+            } else res.status(200).send()
         } catch (error) {
             next(error)
         }
