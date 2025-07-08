@@ -47,7 +47,7 @@ function init({ io }) {
             }
             const { icon, name, color } = req.body
             if (icon) {
-                const { seed, style } = req.body
+                const { seed, style } = req.body.icon
                 await UserServices.updateIcon(userID, { seed, style })
             }
             if(name){
