@@ -1,14 +1,14 @@
 class Notification{
     /**
      * 
-     * @param {{context:{time:number,userID:string|undefined},message:string}} Notification 
+     * @param {{context:{time:number,userId:string|undefined},message:string}} Notification 
      */
     constructor({context,message}){
         /**
-         * @type {{time:number,userID:string|undefined,type:string}}
+         * @type {{time:number,userId:string|undefined,type:string}}
          * @description Contexto de la notificacion
          */
-        this.context={type:'notification',time:context.time,userID:context.userID}
+        this.context={type:'notification',time:context.time,userId:context.userId}
         /**@type {string} */
         this.message=message
     }

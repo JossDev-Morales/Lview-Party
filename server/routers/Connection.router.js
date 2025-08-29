@@ -1,0 +1,77 @@
+import express from "express";
+import { authTokenMdwr } from "../midlewares/apiAuth.mdwr";
+import AuthValidations from "../validations/auth.validations.service";
+import ConnectionValidations from "../validations/connection.validation.service";
+import { UserServices } from "../services/user.services";
+import { Storage } from "../virtualdata/virtualStorage";
+import connectionSigner from "../tools/connection.signer";
+import { v4 } from "uuid";
+import { Icons } from "../tools/IconGenerator";
+export default function initConnectionsRouter(io) {
+    const ConnectionRouter = express.Router();
+    ConnectionRouter.post('/api/session/party/start', AuthValidations.authToken, authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
+        try {
+            const userId = req.tokenPayload.ID
+            const { source: { platform, url, time } } = req.body
+            const user = await UserServices.getUserById(userId)
+            const sessionId = v4()
+            if (user) {
+                const session = Storage.createSession({
+                    id: sessionId,
+                    io: io,
+                    owner: {
+                        id: userId
+                    },
+                    source: {
+                        platform,
+                        url,
+                        time
+                    }
+                })
+                const connectionToken = session.addUser({
+                    owner:true,
+                    id:userId,
+                    isPremium: user.isPremium,
+                    name: user.name,
+                    icon: { style: user.iconStyle, seed: user.icon },
+                    type: 'registered'
+                })
+                res.status(200).json({ token: connectionToken, session: session.getData() })
+            } else {
+                res.status(404).json({ error: { name: 'InexistentUser', message: 'seems like this user was deleted or suspended.' } })
+            }
+        } catch (error) {
+            next(error)
+        }
+    })
+    ConnectionRouter.post('/api/session/party/start/guest', ConnectionValidations.startGuestParty, async (req, res, next) => {
+        try {
+            const userId = v4()
+            const { name, source: { platform, url, time } } = req.body
+            const sessionId = v4()
+            const icons = Icons.genRandomIcon()
+            const session = Storage.createSession({
+                id: sessionId,
+                io: io,
+                owner: {
+                    id: userId
+                },
+                source: {
+                    platform,
+                    url,
+                    time
+                }
+            })
+            const connectionToken = session.addUser({
+                id: userId,
+                isPremium: false,
+                name: name,
+                icon: icons,
+                type: 'guest'
+            })
+            res.status(200).json({ token: connectionToken, session: session.getData(), user: session.findUser(userId).builtData() })
+        } catch (error) {
+            next(error)
+        }
+    })
+}

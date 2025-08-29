@@ -27,13 +27,13 @@ class SessionStorage extends Set {
     }
 
     /**
-     * Encuentra una sesión por su ID.
-     * @param {string} sessionID - El ID de la sesión a buscar.
+     * Encuentra una sesión por su Id.
+     * @param {string} sessionId - El Id de la sesión a buscar.
      * @returns {Session | undefined} La sesión encontrada o undefined si no se encuentra.
      */
-    findByID(sessionID) {
+    findById(sessionId) {
         for (const session of this) {
-            if (session.ID === sessionID) {
+            if (sessionId === sessionId) {
                 return session;
             }
         }
@@ -52,7 +52,7 @@ class SessionStorage extends Set {
 
     /**
      * Crea una sesión y la añade al storage.
-     * @param {{ID:string,io:Server,source:{platform:string,url:string,time:number},owner:{ID:string,isPremium:boolean,name:string,icon:{style:string,seed:string},socket:Socket,type:'registered'|'guest'}}} sessionData - Los datos necesarios para crear una sesión.
+     * @param {{id:string,io:Server,source:{platform:string,url:string,time:number},owner:{id:string,isPremium:boolean,name:string,icon:{style:string,seed:string},socket:Socket,type:'registered'|'guest'}}} sessionData - Los datos necesarios para crear una sesión.
      * @returns {Session} La sesión creada y añadida al storage.
      */
     createSession(sessionData) {

@@ -1,7 +1,7 @@
 import { v4 } from "uuid"
 class Source {
     constructor({ platform, url, time }) {
-        this.ID = v4()
+        this.id = v4()
         this.platform = platform
         this.url = new URL(url)
         /**@type {{v:string,list:string|undefined,index:string|undefined}|{watch:string}} */
@@ -47,10 +47,10 @@ class Source {
     
     
     builtData() {
-        return { id:this.ID,platform: this.platform, url: this.url.href, data: this.data, time:this.time, formatedTime:this.formatTime() }
+        return { id:this.id,platform: this.platform, url: this.url.href, data: this.data, time:this.time, formatedTime:this.formatTime() }
     }
     delete() {
-        this.ID = undefined
+        this.id = undefined
         this.url = undefined
         this.platform = undefined
         this.data = undefined

@@ -7,7 +7,7 @@ const ROOT_DIR = path.resolve();
 
 class ImageItem {
     constructor(file) {
-        this.ID = v4();
+        this.id = v4();
         this.extension = file?.extension
         this.name = file?.name
         this.loaded = file?.name ? true : false
@@ -24,7 +24,7 @@ class ImageItem {
                 }
             });
         }
-        this.ID=undefined
+        this.id=undefined
         this.extension=undefined
         this.name=undefined
         this.loaded=undefined
@@ -32,7 +32,7 @@ class ImageItem {
     }
     build() {
         return {
-            ID: this.ID,
+            id: this.id,
             extension: this.extension,
             name: this.name,
             loaded: this.loaded

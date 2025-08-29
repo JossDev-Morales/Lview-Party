@@ -10,10 +10,10 @@ import ImageItem from "./messagestype/image.body.js";
 class Message {
     /**
      * 
-     * @param {string} userID 
+     * @param {string} userId 
      * @param {Session} session
      */
-    constructor(userID,session) {
+    constructor(userId,session) {
         this.id = v4()
         this.session=session
         /**
@@ -22,10 +22,10 @@ class Message {
          */
         this.contents = []
         /**
-         * @type {{userID:string,type:string,date:Date}}
+         * @type {{userId:string,type:string,date:Date}}
          * @description Contexto de el mensaje
          */
-        this.context = { userID, date: new Date(), type: 'message' }
+        this.context = { userId, date: new Date(), type: 'message' }
     }
     /**
      * 
@@ -34,25 +34,25 @@ class Message {
     async init(newcontent) {
         await this.add(newcontent)
     }
-    editValues(contentID, body) {
-        let currentBody = this.getContent(contentID)
+    editValues(contentId, body) {
+        let currentBody = this.getContent(contentId)
         if (currentBody) {
             currentBody.editContent(body)
         }
     }
-    edit(contentID, body) {
-        let currentBody = this.getContent(contentID)
+    edit(contentId, body) {
+        let currentBody = this.getContent(contentId)
         if (currentBody) {
             currentBody.edit(body)
         }
     }
     /**
      * 
-     * @param {string} contentID 
+     * @param {string} contentId 
      * @returns {content}
      */
-    getContent(contentID){
-        return this.contents.find(c=>c.id===contentID)
+    getContent(contentId){
+        return this.contents.find(c=>c.id===contentId)
     }
     parseString(text) {
         
@@ -80,9 +80,9 @@ class Message {
                                 childs.push({ body: {size:1,name:part}, type: 'image' })
                             }
                         }
-                        let addonID = v4()
-                        addons.push({ id: addonID, style: url.getStyle(part), name: getServiceName(new URL(part).hostname), value: part })
-                        let addonelement = `/$a${addonID}/$a`
+                        let addonId = v4()
+                        addons.push({ id: addonId, style: url.getStyle(part), name: getServiceName(new URL(part).hostname), value: part })
+                        let addonelement = `/$a${addonId}/$a`
                         return addonelement
                     } else {
                         return part;
@@ -167,9 +167,9 @@ class Message {
             return false;
           }
     }
-    removeOne(contentID) {
+    removeOne(contentId) {
         let indications={removeParent:false,removeChilds:[]}
-        let currentBody = this.contents.find(b => b.id == contentID)
+        let currentBody = this.contents.find(b => b.id == contentId)
         console.log('current removeon',currentBody)
         if (currentBody) {
             if(currentBody.cration.childs.length>0){
