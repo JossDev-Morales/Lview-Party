@@ -6,7 +6,7 @@ import { UserServices } from "../services/user.services.js";
 import { Storage } from "../virtualdata/virtualStorage.js";
 import connectionSigner from "../tools/connection.signer.js";
 import { v4 } from "uuid";
-import { Icons } from "../tools/IconGenerator";
+import { Icons } from "../tools/IconGenerator.js";
 export default function initConnectionsRouter(io) {
     const ConnectionRouter = express.Router();
     ConnectionRouter.post('/api/session/party/start', AuthValidations.authToken, authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
