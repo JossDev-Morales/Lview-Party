@@ -14,6 +14,7 @@ import { configDotenv } from 'dotenv';
 import { errorHandlerMdwr } from './midlewares/apiErrorHandler.mdwr.js';
 import path from 'path';
 import AuthRouter from './routers/Auth.router.js';
+import initConnectionsRouter from './routers/Connection.router.js';
 import UserRouter from './routers/User.router.js';
 import { __dirname } from './tools/filesData.js';
 configDotenv()
@@ -423,6 +424,7 @@ app.use(express.static(distPath))
 
 app.use(AuthRouter)
 app.use(UserRouter({io}))
+app.use(initConnectionsRouter)
 app.use(errorHandlerMdwr)
 app.get('*', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'))
