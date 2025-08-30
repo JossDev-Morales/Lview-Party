@@ -1,7 +1,6 @@
 import express from "express";
 import { authTokenMdwr } from "../midlewares/apiAuth.mdwr.js";
 import AuthValidations from "../validations/auth.validations.service.js";
-import ConnectionValidations from "../validations/connection.validation.service.js";
 import { UserServices } from "../services/user.services.js";
 import { Storage } from "../virtualdata/virtualStorage.js";
 import connectionSigner from "../tools/connection.signer.js";
@@ -9,7 +8,7 @@ import { v4 } from "uuid";
 import { Icons } from "../tools/IconGenerator.js";
 export default function initConnectionsRouter(io) {
     const ConnectionRouter = express.Router();
-    ConnectionRouter.post('/api/session/party/start', AuthValidations.authToken, authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
+    ConnectionRouter.post('/api/session/party/start', authTokenMdwr, async (req, res, next) => {
         try {
             const userId = req.tokenPayload.ID
             const { source: { platform, url, time } } = req.body
@@ -44,7 +43,7 @@ export default function initConnectionsRouter(io) {
             next(error)
         }
     })
-    ConnectionRouter.post('/api/session/party/start/guest', ConnectionValidations.startGuestParty, async (req, res, next) => {
+    /*ConnectionRouter.post('/api/session/party/start/guest', ConnectionValidations.startGuestParty, async (req, res, next) => {
         try {
             const userId = v4()
             const { name, source: { platform, url, time } } = req.body
@@ -73,5 +72,5 @@ export default function initConnectionsRouter(io) {
         } catch (error) {
             next(error)
         }
-    })
+    })*/
 }
