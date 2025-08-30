@@ -9,7 +9,7 @@ import { v4 } from "uuid";
 import { Icons } from "../tools/IconGenerator.js";
 const ConnectionRouter = express.Router();
 export default function initConnectionsRouter(io) {
-    ConnectionRouter.post('/api/session/party/start', AuthValidations.authToken,(req,res)=>{res.sendStatus(200)}, authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
+    ConnectionRouter.post('/api/session/party/start', AuthValidations.authToken, authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
         try {
             const userId = req.tokenPayload.ID
             console.log('user id',userId)
