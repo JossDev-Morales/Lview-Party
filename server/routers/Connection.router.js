@@ -9,7 +9,7 @@ import { v4 } from "uuid";
 import { Icons } from "../tools/IconGenerator.js";
 export default function initConnectionsRouter(io) {
     const ConnectionRouter = express.Router();
-    ConnectionRouter.post('/api/session/party/start', authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
+    ConnectionRouter.post('/api/session/party/start', AuthValidations.authToken, authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
         try {
             const userId = req.tokenPayload.ID
             const { source: { platform, url, time } } = req.body
@@ -44,7 +44,7 @@ export default function initConnectionsRouter(io) {
             next(error)
         }
     })
-    /*ConnectionRouter.post('/api/session/party/start/guest', ConnectionValidations.startGuestParty, async (req, res, next) => {
+    ConnectionRouter.post('/api/session/party/start/guest', ConnectionValidations.startGuestParty, async (req, res, next) => {
         try {
             const userId = v4()
             const { name, source: { platform, url, time } } = req.body
@@ -73,5 +73,5 @@ export default function initConnectionsRouter(io) {
         } catch (error) {
             next(error)
         }
-    })*/
+    })
 }
