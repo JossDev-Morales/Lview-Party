@@ -424,7 +424,7 @@ app.use(express.static(distPath))
 
 app.use(AuthRouter)
 app.use(UserRouter({io}))
-app.use(initConnectionsRouter)
+app.use(initConnectionsRouter(io))
 app.use(errorHandlerMdwr)
 app.get('*', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'))

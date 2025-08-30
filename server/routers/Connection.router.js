@@ -7,8 +7,8 @@ import { Storage } from "../virtualdata/virtualStorage.js";
 import connectionSigner from "../tools/connection.signer.js";
 import { v4 } from "uuid";
 import { Icons } from "../tools/IconGenerator.js";
+const ConnectionRouter = express.Router();
 export default function initConnectionsRouter(io) {
-    const ConnectionRouter = express.Router();
     ConnectionRouter.post('/api/session/party/start', AuthValidations.authToken,(req,res)=>{res.sendStatus(200)}, authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
         try {
             const userId = req.tokenPayload.ID
@@ -75,4 +75,5 @@ export default function initConnectionsRouter(io) {
             next(error)
         }
     })
+    return ConnectionRouter
 }
