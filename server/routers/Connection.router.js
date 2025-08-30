@@ -12,6 +12,7 @@ export default function initConnectionsRouter(io) {
     ConnectionRouter.post('/api/session/party/start', AuthValidations.authToken, authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
         try {
             const userId = req.tokenPayload.ID
+            console.log('user id',userId)
             const { source: { platform, url, time } } = req.body
             const user = await UserServices.getUserById(userId)
             const sessionId = v4()
