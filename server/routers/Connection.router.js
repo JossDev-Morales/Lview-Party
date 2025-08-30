@@ -1,10 +1,10 @@
 import express from "express";
-import { authTokenMdwr } from "../midlewares/apiAuth.mdwr";
-import AuthValidations from "../validations/auth.validations.service";
-import ConnectionValidations from "../validations/connection.validation.service";
-import { UserServices } from "../services/user.services";
-import { Storage } from "../virtualdata/virtualStorage";
-import connectionSigner from "../tools/connection.signer";
+import { authTokenMdwr } from "../midlewares/apiAuth.mdwr.js";
+import AuthValidations from "../validations/auth.validations.service.js";
+import ConnectionValidations from "../validations/connection.validation.service.js";
+import { UserServices } from "../services/user.services.js";
+import { Storage } from "../virtualdata/virtualStorage.js";
+import connectionSigner from "../tools/connection.signer.js";
 import { v4 } from "uuid";
 import { Icons } from "../tools/IconGenerator";
 export default function initConnectionsRouter(io) {
