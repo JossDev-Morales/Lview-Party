@@ -1,10 +1,10 @@
 import express from "express";
-import { authTokenMdwr } from "../midlewares/apiAuth.mdwr.js";
+import { authTokenMdwr } from "../middlewares/apiAuth.mdwr.js";
 import { UserServices } from "../services/user.services.js";
 import { AuthError } from "../errorsHandler/AuthError.class.js";
 import { Storage } from "../virtualdata/virtualStorage.js";
 import uploader from "../image.tools/store.js";
-import multerErrorHandler from "../midlewares/multerErrorHandler.js";
+import multerErrorHandler from "../middlewares/multerErrorHandler.js";
 import { Icons } from "../tools/IconGenerator.js";
 import AuthValidations from "../validations/auth.validations.service.js";
 import UserValidations from "../validations/user.validations.service.js";

@@ -19,27 +19,13 @@ class connectionSigner{
     }
     /**
      * 
-     * @param {string} token 
-     * @param {string} userId 
-     * @returns 
+     * @param {string} token
+     * @returns {{owner:string,sessionId:string,connectionId:string}}
      */
-    verifyConnection(token,userId){
+    verifyConnection(token){
         try {
-            const {owner} = jwt.verify(token,process.env.SECRET_KEY)
-            return owner===userId
-        } catch (error) {
-            throw error
-        }
-    }
-    /**
-     * 
-     * @param {string} token 
-     * @returns 
-     */
-    tokenSessionId(token){
-        try {
-            const {sessionId} = jwt.verify(token,process.env.SECRET_KEY)
-            return sessionId
+            const {owner,sessionId,connectionId} = jwt.verify(token,process.env.SECRET_KEY)
+            return {owner,sessionId,connectionId}
         } catch (error) {
             throw error
         }

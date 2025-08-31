@@ -1,5 +1,5 @@
 import express from "express";
-import { authTokenMdwr } from "../midlewares/apiAuth.mdwr.js";
+import { authTokenMdwr } from "../middlewares/apiAuth.mdwr.js";
 import AuthValidations from "../validations/auth.validations.service.js";
 import ConnectionValidations from "../validations/connection.validation.service.js";
 import { UserServices } from "../services/user.services.js";

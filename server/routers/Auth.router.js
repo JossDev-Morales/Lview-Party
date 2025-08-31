@@ -6,7 +6,7 @@ import { authService } from "../services/auth.services.js";
 import { Icons } from "../tools/IconGenerator.js";
 import { hasTokenExpired } from "../tools/tokenExpired.js";
 import refresher from "../tools/refreshTokens.js";
-import { authTokenMdwr, requestMailVerification, validateVerificationCode } from "../midlewares/apiAuth.mdwr.js";
+import { authTokenMdwr, requestMailVerification, validateVerificationCode } from "../middlewares/apiAuth.mdwr.js";
 import prisma from "../../prisma/postgresClient.js";
 import { compare } from "bcrypt";
 import AuthValidations from "../validations/auth.validations.service.js";
