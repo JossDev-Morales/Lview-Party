@@ -1,5 +1,5 @@
 import { Socket } from "socket.io"
-import { SessionError } from "../errorsHandler/SessionError.class"
+import { SessionError } from "../errorsHandler/SessionError.class.js"
 
 /**
  * 
