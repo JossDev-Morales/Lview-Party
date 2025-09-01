@@ -8,9 +8,9 @@ class User{
      * 
      * @param {{sessionId:string,id:string,socket:Socket,name:string,icon:{style:string,seed:string},type:'registered'|'guest',isPremium:boolean|undefined,owner:boolean|undefined,connectionId:string,activity:{defuse:Function,alertDefuse:Function,on:boolean}}} param0 
      */
-    constructor({sessionId,Id,socket,name,icon,type,isPremium,owner,connectionId,activity:{on,defuse,alertDefuse}}){
+    constructor({sessionId,id,socket,name,icon,type,isPremium,owner,connectionId,activity:{on,defuse,alertDefuse}}){
         this.sessionId=sessionId
-        this.id=Id
+        this.id=id
         this.socket=socket
         this.name=name
         this.icon=icon

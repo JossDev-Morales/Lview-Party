@@ -21,7 +21,8 @@ export default function initConnectionsRouter(io) {
                     id: sessionId,
                     io: io,
                     owner: {
-                        id: userId
+                        id: userId,
+                        isPremium:user.isPremium
                     },
                     source: {
                         platform,

@@ -66,7 +66,8 @@ class Session {
                     sessionData: {
                         id: this.id,
                         source: this.source.builtData(),
-                        history: this.history
+                        history: this.history,
+                        owner:this.owner
                     },
                     users: Array.from(this.users).map(user => user.builtData())
                 }

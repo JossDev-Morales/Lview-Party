@@ -8,12 +8,8 @@ export default async function AuthConnection(socket,context,next) {
             next(new AuthError({name:'MissingToken', message:'The token was not received',type:'ConnectionRejected',code:30}))
         }
         const { owner, connectionId, sessionId } = signer.verifyConnection(token)
-        console.log(sessionId)
         let Session=Storage.findById(sessionId)
-        console.log(Session)
-        console.log(owner)
         let User=Session.findUser(owner)
-        console.log(User)
         if (!User) {
             next(new AuthError({name:'UserNotAccepted',message:'This user is not longer available at this party session.',type:'ConnectionRejected',code:30}))
             return;
