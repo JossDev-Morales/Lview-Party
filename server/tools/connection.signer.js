@@ -7,7 +7,7 @@ class connectionSigner{
      * 
      * @param {string} sessionId 
      * @param {string} userId 
-     * @returns 
+     * @returns {string} token
      */
     sign(sessionId,userId,connectionId){
         try {

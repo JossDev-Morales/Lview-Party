@@ -14,6 +14,7 @@ export default async function AuthConnection(socket,context,next) {
             next(new AuthError({name:'UserNotAccepted',message:'This user is not longer available at this party session.',type:'ConnectionRejected',code:30}))
             return;
         }
+        console.log(User.connectionId,connectionId)
         if (User.connectionId!==connectionId) {
             next(new AuthError({name:'OldTokenConnection',message:'This token connection is not the latest signed token for this connection.',type:'ConnectionRejected',code:30}))
             return;
