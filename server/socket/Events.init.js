@@ -1,5 +1,5 @@
 import { Socket } from "socket.io"
-import useMiddlewares from "./useMiddlewares"
+import useMiddlewares from "./useMiddlewares.js"
 
 /**
  * 
