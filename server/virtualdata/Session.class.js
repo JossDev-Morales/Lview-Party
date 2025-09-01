@@ -13,7 +13,7 @@ import Activity from './structures/activity.js';
 class Session {
     /**
      * 
-     * @param {{io:Server,source:{platform:string,url:string,time:number},owner:{id:string,isPremium:boolean,name:string,icon:{style:string,seed:string},socket:Socket,type:'registered'|'guest'}}} data 
+     * @param {{io:Server,source:{platform:string,url:string,time:number},owner:{id:string,isPremium:boolean},socket:Socket,type:'registered'|'guest'}}} data 
      */
     constructor(data) {
         const {
@@ -21,10 +21,7 @@ class Session {
             source,
             owner: {
                 id: ownerId,
-                isPremium,
-                name,
-                icon,
-                type
+                isPremium
             }
         } = data;
         this.lastActivityTime = new Date();
