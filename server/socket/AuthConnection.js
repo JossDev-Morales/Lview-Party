@@ -9,6 +9,10 @@ export default async function AuthConnection(socket,context,next) {
         }
         const { owner, connectionId, sessionId } = signer.verifyConnection(token)
         let Session=Storage.findById(sessionId)
+        if(!Session){
+             next(new AuthError({name:'SessionNotFound',message:'This party seems that does not longer exist.',type:'ConnectionRejected',code:30}))
+            return;
+        }
         let User=Session.findUser(owner)
         if (!User) {
             next(new AuthError({name:'UserNotAccepted',message:'This user is not longer available at this party session.',type:'ConnectionRejected',code:30}))
@@ -18,6 +22,7 @@ export default async function AuthConnection(socket,context,next) {
             next(new AuthError({name:'OldTokenConnection',message:'This token connection is not the latest signed token for this connection.',type:'ConnectionRejected',code:30}))
             return;
         }    
+        User.socket=socket
         next()
     } catch (error) {
         next(error)
