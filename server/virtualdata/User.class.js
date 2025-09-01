@@ -19,10 +19,10 @@ class User{
         this.owner=owner??false
         this.connectionId=connectionId
         this.activity= new Activity({limit:10*60*1000,defuseFunction:(current)=>{
-            console.log('inactivity:', this.name, this.id)
+            console.log('inactivity:', this.name,name, this.id)
             defuse({me:this,current:this})}})
         if(on)this.activity.start()
-        this.alertActivity=new Activity({limit:1000*30,defuseFunction:alertDefuse})
+        this.alertActivity=new Activity({limit:1000*30,defuseFunction:()=>alertDefuse({me:this})})
         this.activity.addDependencie(()=>this.alertActivity.stop())
     }
     builtData(){

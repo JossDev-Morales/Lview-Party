@@ -130,7 +130,7 @@ class Session {
                         this.removeUser(me.id)
                     }
                 },
-                alertDefuse:()=>{this.removeUser(me.id)},
+                alertDefuse:({me})=>{this.removeUser(me.id)},
                 on:this.source.status===0
                 }})
                 this.users.add(newUser)
