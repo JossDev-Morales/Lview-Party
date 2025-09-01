@@ -17,6 +17,8 @@ import AuthRouter from './routers/Auth.router.js';
 import initConnectionsRouter from './routers/Connection.router.js';
 import UserRouter from './routers/User.router.js';
 import { __dirname } from './tools/filesData.js';
+import fs from 'fs'
+import initSocketConnection from './socket/connection.sckt.js';
 configDotenv()
 const PORT = process.env.PORT ?? "3000";
 const app = express();
@@ -29,10 +31,11 @@ const io = new Server(server, {
         credentials: true, // Habilita el intercambio de cookies si es necesario
     },
     connectionStateRecovery: {
-        skipMiddlewares: true,
         maxDisconnectionDuration: (1000 * 60) * 2
     }
 });
+//inicia el evento connect y procesa los client-sockets
+initSocketConnection(io)
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use(morgan('combined'));
@@ -47,6 +50,7 @@ app.use(cors({
     credentials: true
   }));
 // Log de conexión
+/*
 io.use(socketAuth)
 // session
 io.on('connection', async (socket) => {
@@ -414,7 +418,7 @@ io.on('connection', async (socket) => {
         socket.disconnect(true)
     }
 });
-
+*/
 app.get('/health', (req, res) => {
     res.status(200).send('OK');
   });
@@ -429,7 +433,6 @@ app.use(errorHandlerMdwr)
 app.get('*', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'))
 })
-import fs from 'fs'
 
 console.log('Checking distPath:', distPath)
 console.log('index.html exists:', fs.existsSync(path.join(distPath, 'index.html')))
