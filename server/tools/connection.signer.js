@@ -10,6 +10,7 @@ class connectionSigner{
      * @returns {string} token
      */
     sign(sessionId,userId,connectionId){
+        console.log('connection id in signer')
         try {
             const token = jwt.sign({ sessionId, owner:userId, connectionId }, process.env.SECRET_KEY, { expiresIn: "24h" });
             return token
@@ -24,7 +25,9 @@ class connectionSigner{
      */
     verifyConnection(token){
         try {
-            const {owner,sessionId,connectionId} = jwt.verify(token,process.env.SECRET_KEY)
+            const data = jwt.verify(token,process.env.SECRET_KEY)
+            const {owner,sessionId,connectionId}=data
+            console.log(data)
             return {owner,sessionId,connectionId}
         } catch (error) {
             throw error
