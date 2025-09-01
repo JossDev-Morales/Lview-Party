@@ -119,7 +119,6 @@ class Session {
             let findedUser=this.findUser(id)
             if (!findedUser) {
                 let connectionId= v4()
-                console.log(connectionId,'at origin')
                 const newUser = new User({ id, sessionId:this.id, icon, name, type, isPremium, owner, connectionId,activity:{
                     defuse:({me,current})=>{
                     if(me.socket){
