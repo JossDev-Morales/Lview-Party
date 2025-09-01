@@ -1,7 +1,7 @@
 import express from "express";
-import { AuthError } from "../errorsHandler/AuthError.class";
-import connectionSigner from "../tools/connection.signer";
-import { Storage } from "../virtualdata/virtualStorage";
+import { AuthError } from "../errorsHandler/AuthError.class.js";
+import connectionSigner from "../tools/connection.signer.js";
+import { Storage } from "../virtualdata/virtualStorage.js";
 const SessionRouter = express.Router()
 SessionRouter.post('/api/session/activity/touch', (req, res, next) => {
     try {
