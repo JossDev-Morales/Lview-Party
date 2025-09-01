@@ -12,13 +12,10 @@ export default function initConnectionsRouter(io) {
     ConnectionRouter.post('/api/session/party/start', AuthValidations.authToken, authTokenMdwr, ConnectionValidations.startParty, async (req, res, next) => {
         try {
             const userId = req.tokenPayload.ID
-            console.log('user id',userId)
             const { source: { platform, url, time } } = req.body
             const user = await UserServices.getUserById(userId)
-            const sessionId = v4()
             if (user) {
                 const session = Storage.createSession({
-                    id: sessionId,
                     io: io,
                     owner: {
                         id: userId,
@@ -50,10 +47,8 @@ export default function initConnectionsRouter(io) {
         try {
             const userId = v4()
             const { name, source: { platform, url, time } } = req.body
-            const sessionId = v4()
             const icons = Icons.genRandomIcon()
             const session = Storage.createSession({
-                id: sessionId,
                 io: io,
                 owner: {
                     id: userId
@@ -66,7 +61,6 @@ export default function initConnectionsRouter(io) {
             })
             const connectionToken = session.addUser({
                 id: userId,
-                isPremium: false,
                 name: name,
                 icon: icons,
                 type: 'guest'
