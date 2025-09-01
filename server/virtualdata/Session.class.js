@@ -30,7 +30,7 @@ class Session {
         this.source = new Source(source);
         this.owner = {
             id: ownerId,
-            isPremium,
+            isPremium:isPremium??false,
         };
         /**@type {Set<User>} */
         this.users = new Set()
